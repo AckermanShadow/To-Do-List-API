@@ -1,0 +1,27 @@
+name: Run Tests and Deploy
+
+on: [push]
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+
+      - name: Install Composer Dependencies
+        run: composer install --no-progress --no-suggest
+
+      - name: Run PHPUnit Tests
+        run: php artisan test
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-deploy@v1
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
